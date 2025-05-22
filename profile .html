@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profile - Clothify</title>
+  <link rel="stylesheet" href="styles.css" />
+  
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Clothify</h1>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="cart.html">Cart 🛒</a></li>
+          <li><a href="#" onclick="logout()">Logout</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section class="profile-section">
+    <h2>User Profile</h2>
+    <div id="userProfile">
+      <p><strong>Name:</strong> <span id="userName">Loading...</span></p>
+      <p><strong>Email:</strong> <span id="userEmail">Loading...</span></p>
+      <p><strong>Phone:</strong> <span id="userPhone">Loading...</span></p>
+    </div>
+
+    <h3>Order History</h3>
+    <ul id="orderHistory">
+      <!-- Order items will be populated here -->
+    </ul>
+    <button onclick="logout()">Logout</button>
+  </section>
+
+  <script>
+    // Firebase configuration
+    const firebaseConfig = {
+    apiKey: "AIzaSyBAvYpjpRz__aHaSD7VG1Ogs_EAExb1Y5I",
+    authDomain: "threefit-deedev.firebaseapp.com",
+    projectId: "threefit-deedev",
+    storageBucket: "threefit-deedev.firebasestorage.app",
+    messagingSenderId: "532866476653",
+    appId: "1:532866476653:web:87126bfeafd3359b0bed64",
+    measurementId: "G-SY2KZWYDT8"
+  };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+
+    // Authentication and Profile Display
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        document.getElementById('userName').textContent = user.displayName || "N/A";
+        document.getElementById('userEmail').textContent = user.email || "N/A";
+        document.getElementById('userPhone').textContent = user.phoneNumber || "N/A";
+
+        const userId = user.uid;
+        db.ref('orders/' + userId).once('value').then(snapshot => {
+          const orders = snapshot.val();
+          const list = document.getElementById('orderHistory');
+          list.innerHTML = '';
+          if (orders) {
+            Object.values(orders).forEach(order => {
+              const li = document.createElement('li');
+              li.textContent = `🛒 ${order.item} - $${order.price}`;
+              list.appendChild(li);
+            });
+          } else {
+            list.innerHTML = "<li>No orders found.</li>";
+          }
+        });
+      } else {
+        window.location.href = "login.html"; // Redirect to login if not logged in
+      }
+    });
+
+    // Logout function
+    function logout() {
+      auth.signOut().then(() => window.location.href = "login.html");
+    }
+  </script>
+</body>
+</html>

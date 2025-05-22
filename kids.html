@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kids' Collection - Clothify</title>
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+  <script>
+    // TODO: Replace with your actual Firebase config
+    const firebaseConfig = {
+    apiKey: "AIzaSyBAvYpjpRz__aHaSD7VG1Ogs_EAExb1Y5I",
+    authDomain: "threefit-deedev.firebaseapp.com",
+    projectId: "threefit-deedev",
+    storageBucket: "threefit-deedev.firebasestorage.app",
+    messagingSenderId: "532866476653",
+    appId: "1:532866476653:web:87126bfeafd3359b0bed64",
+    measurementId: "G-SY2KZWYDT8"
+  };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    // Auth Guard
+    firebase.auth().onAuthStateChanged(user => {
+      if (!user) {
+        window.location.href = "login.html";
+      }
+    });
+  </script>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <h1>Clothify</h1>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="men.html">Men</a></li>
+          <li><a href="women.html">Women</a></li>
+          <li><a href="kids.html">Kids</a></li>
+          <li><a href="cart.html">Cart 🛒</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Kids Collection -->
+  <section class="products">
+    <h2>Kids' Collection</h2>
+    <div class="product-grid">
+      <div class="product">
+        <img src="https://via.placeholder.com/200x250?text=Kids+T-Shirt" alt="T-Shirt">
+        <h3>Cartoon T-Shirt</h3>
+        <p>$14.99</p>
+        <button onclick="addToCart('Cartoon T-Shirt')">Add to Cart</button>
+      </div>
+      <div class="product">
+        <img src="https://via.placeholder.com/200x250?text=Kids+Hoodie" alt="Hoodie">
+        <h3>Colorful Hoodie</h3>
+        <p>$22.99</p>
+        <button onclick="addToCart('Colorful Hoodie')">Add to Cart</button>
+      </div>
+      <div class="product">
+        <img src="https://via.placeholder.com/200x250?text=Kids+Pants" alt="Pants">
+        <h3>Jogger Pants</h3>
+        <p>$18.99</p>
+        <button onclick="addToCart('Jogger Pants')">Add to Cart</button>
+      </div>
+      <div class="product">
+        <img src="https://via.placeholder.com/200x250?text=Kids+Dress" alt="Dress">
+        <h3>Printed Frock</h3>
+        <p>$27.99</p>
+        <button onclick="addToCart('Printed Frock')">Add to Cart</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Clothify. All rights reserved.</p>
+  </footer>
+
+  <!-- Add to Cart Script -->
+  <script>
+    function addToCart(item) {
+      // Example: store in localStorage
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      cart.push({ name: item });
+      localStorage.setItem('cart', JSON.stringify(cart));
+      alert(item + " added to cart!");
+    }
+  </script>
+</body>
+</html>
