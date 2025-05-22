@@ -1,42 +1,209 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-
-<script>
-  // Initialize Firebase
-  const firebaseConfig = {
-    apiKey: "AIzaSyBAvYpjpRz__aHaSD7VG1Ogs_EAExb1Y5I",
-    authDomain: "threefit-deedev.firebaseapp.com",
-    projectId: "threefit-deedev",
-    storageBucket: "threefit-deedev.firebasestorage.app",
-    messagingSenderId: "532866476653",
-    appId: "1:532866476653:web:87126bfeafd3359b0bed64",
-    measurementId: "G-SY2KZWYDT8"
-  };
-  firebase.initializeApp(firebaseConfig);
-
-  // Auth Guard
-  firebase.auth().onAuthStateChanged(user => {
-    if (!user) {
-      window.location.href = "login.html";
-    }
-  });
-</script>
-
-
-</script>
-
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Clothify - Clothing Store</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Clothify — Fresh & Sophisticated</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display&display=swap" rel="stylesheet" />
+  
+  <style>
+    /* Reset */
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+      font-family: 'Montserrat', sans-serif;
+    }
+    body {
+      background-color: #f7f9fc;
+      color: #344055;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a {
+      color: #4e91a8;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+    a:hover {
+      color: #a18d6c;
+    }
+
+    header {
+      background-color: #ffffff;
+      padding: 1.2rem 2rem;
+      box-shadow: 0 2px 8px rgba(52, 64, 85, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 1.8rem;
+      color: #344055;
+      letter-spacing: 1px;
+      user-select: none;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    nav li {
+      cursor: pointer;
+      position: relative;
+    }
+    nav li::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -4px;
+      left: 0;
+      background-color: #a18d6c;
+      transition: width 0.3s ease;
+      border-radius: 2px;
+    }
+    nav li:hover::after {
+      width: 100%;
+    }
+
+    main {
+      flex-grow: 1;
+      padding: 3rem 2rem 4rem;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 2.8rem;
+      text-align: center;
+      margin-bottom: 2.5rem;
+      color: #4e91a8;
+      letter-spacing: 0.04em;
+      user-select: none;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 2rem;
+    }
+
+    .product {
+      background-color: #ffffff;
+      border-radius: 14px;
+      padding: 1.4rem 1.8rem 2.2rem;
+      box-shadow: 0 8px 16px rgba(65, 83, 105, 0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      color: #344055;
+      user-select: none;
+    }
+    .product:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 28px rgba(65, 83, 105, 0.15);
+    }
+
+    .product img {
+      width: 180px;
+      border-radius: 16px;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 12px rgba(78, 145, 168, 0.2);
+      transition: box-shadow 0.3s ease;
+    }
+    .product:hover img {
+      box-shadow: 0 8px 22px rgba(78, 145, 168, 0.35);
+    }
+
+    .product h3 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+      color: #4e91a8;
+    }
+
+    .product p {
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 1.3rem;
+      color: #a18d6c;
+    }
+
+    button {
+      background-color: #a18d6c;
+      border: none;
+      padding: 0.6rem 1.8rem;
+      border-radius: 28px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 3px 12px rgba(161, 141, 108, 0.5);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      user-select: none;
+    }
+    button:hover {
+      background-color: #4e91a8;
+      box-shadow: 0 6px 20px rgba(78, 145, 168, 0.6);
+    }
+
+    footer {
+      background-color: #f7f9fc;
+      text-align: center;
+      padding: 1.5rem 0;
+      color: #8892a0;
+      font-weight: 400;
+      font-size: 0.9rem;
+      letter-spacing: 0.5px;
+      user-select: none;
+      border-top: 1px solid #e0e6ed;
+      font-style: italic;
+    }
+
+    @media (max-width: 480px) {
+      header h1 {
+        font-size: 1.4rem;
+      }
+      nav ul {
+        gap: 1rem;
+      }
+      h2 {
+        font-size: 2rem;
+        letter-spacing: 0.03em;
+      }
+      .product-grid {
+        grid-template-columns: 1fr;
+      }
+      .product img {
+        width: 140px;
+      }
+      button {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
 <body>
+
   <header>
     <h1>Clothify</h1>
     <nav>
@@ -45,41 +212,52 @@
         <li><a href="men.html">Men</a></li>
         <li><a href="women.html">Women</a></li>
         <li><a href="kids.html">Kids</a></li>
-        <li><a href="cart.html">Cart 🛒</a></li>
+        <li><a href="cart.html">Cart</a></li>
       </ul>
     </nav>
   </header>
 
   <main>
     <section class="products">
-      <h2>Latest Arrivals</h2>
+      <h2>Fresh Finds</h2>
       <div class="product-grid">
-        <div class="product">
-          <img src="https://via.placeholder.com/200x250" alt="T-shirt">
+        <div class="product" tabindex="0">
+          <img src="https://via.placeholder.com/200x250/7ca3b9/ffffff?text=Casual+T-shirt" alt="Casual T-shirt" />
           <h3>Casual T-shirt</h3>
           <p>$15.99</p>
           <button onclick="addToCart('Casual T-shirt')">Add to Cart</button>
         </div>
-        <div class="product">
-          <img src="https://via.placeholder.com/200x250" alt="Jeans">
+        <div class="product" tabindex="0">
+          <img src="https://via.placeholder.com/200x250/9db4c0/ffffff?text=Blue+Jeans" alt="Blue Jeans" />
           <h3>Blue Jeans</h3>
           <p>$39.99</p>
           <button onclick="addToCart('Blue Jeans')">Add to Cart</button>
         </div>
-        <div class="product">
-          <img src="https://via.placeholder.com/200x250" alt="Dress">
-          <h3>Summer Dress</h3>
-          <p>$29.99</p>
-          <button onclick="addToCart('Summer Dress')">Add to Cart</button>
+        <div class="product" tabindex="0">
+          <img src="https://via.placeholder.com/200x250/7ca3b9/ffffff?text=Leather+Jacket" alt="Leather Jacket" />
+          <h3>Leather Jacket</h3>
+          <p>$79.99</p>
+          <button onclick="addToCart('Leather Jacket')">Add to Cart</button>
+        </div>
+        <div class="product" tabindex="0">
+          <img src="https://via.placeholder.com/200x250/9db4c0/ffffff?text=Vintage+Sneakers" alt="Vintage Sneakers" />
+          <h3>Vintage Sneakers</h3>
+          <p>$49.99</p>
+          <button onclick="addToCart('Vintage Sneakers')">Add to Cart</button>
         </div>
       </div>
     </section>
   </main>
 
   <footer>
-    <p>&copy; 2025 Clothify. All rights reserved.</p>
+    &copy; 2025 Clothify. Elegant style, effortless vibe.
   </footer>
 
-  <script src="script.js"></script>
+  <script>
+    function addToCart(item) {
+      alert(`"${item}" added to your cart.`);
+    }
+  </script>
+  
 </body>
 </html>
