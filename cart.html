@@ -65,19 +65,17 @@
 <body>
   <!-- Header -->
   <header>
-    
-      <h1>Clothify</h1>
-      <nav>
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="men.html">Men</a></li>
-          <li><a href="women.html">Women</a></li>
-          <li><a href="kids.html">Kids</a></li>
-          <li><a href="cart.html">Cart</a></li>
-          <li><a href="profile .html">Profile</a></li>
-        </ul>
-      </nav>
-    
+    <h1>Clothify</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="men.html">Men</a></li>
+        <li><a href="women.html">Women</a></li>
+        <li><a href="kids.html">Kids</a></li>
+        <li><a href="cart.html">Cart</a></li>
+        <li><a href="profile.html">Profile</a></li>
+      </ul>
+    </nav>
   </header>
 
   <!-- Cart Section -->
@@ -94,37 +92,45 @@
   </footer>
 
   <script>
-    // Your Firebase Config (Replace with your own)
     const firebaseConfig = {
-    apiKey: "AIzaSyBAvYpjpRz__aHaSD7VG1Ogs_EAExb1Y5I",
-    authDomain: "threefit-deedev.firebaseapp.com",
-    projectId: "threefit-deedev",
-    storageBucket: "threefit-deedev.firebasestorage.app",
-    messagingSenderId: "532866476653",
-    appId: "1:532866476653:web:87126bfeafd3359b0bed64",
-    measurementId: "G-SY2KZWYDT8"
-  };
-    firebase.initializeApp(firebaseConfig);
+      apiKey: "AIzaSyBAvYpjpRz__aHaSD7VG1Ogs_EAExb1Y5I",
+      authDomain: "threefit-deedev.firebaseapp.com",
+      projectId: "threefit-deedev",
+      storageBucket: "threefit-deedev.appspot.com",
+      messagingSenderId: "532866476653",
+      appId: "1:532866476653:web:87126bfeafd3359b0bed64",
+      measurementId: "G-SY2KZWYDT8"
+    };
 
+    firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.database();
 
-    // Dummy cart data (Replace with real data)
-    let cart = [
-      { name: "Floral Dress", price: 39.99, image: "https://via.placeholder.com/200x250?text=Dress" },
-      { name: "Cartoon T-Shirt", price: 14.99, image: "https://via.placeholder.com/200x250?text=Kids+T-Shirt" },
-      { name: "Denim Jacket", price: 44.99, image: "https://via.placeholder.com/200x250?text=Jacket" }
-    ];
+    let cart = [];
 
-    // Render Cart Items
+    function loadCart() {
+      cart = JSON.parse(localStorage.getItem("cart")) || [];
+    }
+
+    function saveCart() {
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
+
     function renderCart() {
       const cartItems = document.getElementById("cartItems");
+      const totalAmount = document.getElementById("totalAmount");
       cartItems.innerHTML = "";
       let total = 0;
 
+      if (cart.length === 0) {
+        cartItems.innerHTML = "<p>Your cart is empty.</p>";
+        totalAmount.innerText = "Total: $0.00";
+        return;
+      }
+
       cart.forEach((item, index) => {
         total += item.price;
-        const itemHTML = `
+        cartItems.innerHTML += `
           <div class="cart-item">
             <img src="${item.image}" alt="${item.name}">
             <div class="cart-item-details">
@@ -136,14 +142,14 @@
             </div>
           </div>
         `;
-        cartItems.innerHTML += itemHTML;
       });
 
-      document.getElementById("totalAmount").innerText = `Total: $${total.toFixed(2)}`;
+      totalAmount.innerText = `Total: $${total.toFixed(2)}`;
     }
 
     function removeItem(index) {
       cart.splice(index, 1);
+      saveCart();
       renderCart();
     }
 
@@ -154,7 +160,11 @@
         return;
       }
 
-      // Save each item in Firebase under the user's orders
+      if (cart.length === 0) {
+        alert("Your cart is empty.");
+        return;
+      }
+
       cart.forEach(item => {
         db.ref("orders/" + user.uid).push({
           item: item.name,
@@ -165,14 +175,15 @@
 
       alert("Thank you for your purchase!");
       cart = [];
+      saveCart();
       renderCart();
     }
 
-    // Wait for auth state
     auth.onAuthStateChanged(user => {
       if (!user) {
         window.location.href = "login.html";
       } else {
+        loadCart();
         renderCart();
       }
     });
