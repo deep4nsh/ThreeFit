@@ -88,9 +88,29 @@
 
   <!-- Add to Cart Script -->
   <script>
-    function addToCart(item) {
-      alert(item + " added to cart!");
-    }
+    // script.js
+
+function addToCart(productName, productPrice, productImage) {
+  // Retrieve existing cart from localStorage or initialize an empty array
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  // Create a new product object
+  const newItem = {
+    name: productName,
+    price: productPrice,
+    image: productImage
+  };
+
+  // Add the new item to the cart array
+  cart.push(newItem);
+
+  // Save the updated cart back to localStorage
+  localStorage.setItem("cart", JSON.stringify(cart));
+
+  // Optional: Provide user feedback
+  alert(`${productName} has been added to your cart.`);
+}
+
   </script>
 </body>
 </html>
